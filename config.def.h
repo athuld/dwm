@@ -47,6 +47,7 @@ static const Layout layouts[] = {
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "[D]",      deck },
+	{ NULL,       NULL },
 };
 
 #include <X11/XF86keysym.h>
@@ -86,6 +87,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ControlMask,		XK_comma,  cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
 	{ MODKEY,	                XK_f,      fullscreen,     {0} },
 	/*{ MODKEY,	                XK_space,  setlayout,      {0} },*/
 	{ MODKEY|ControlMask,           XK_space,  togglefloating, {0} },
