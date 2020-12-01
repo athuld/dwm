@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=dwm
 Comment=dynamic window manager
-Exec=dwm
+Exec=startdwm
+TryExec=startdwm
 Type=Application
