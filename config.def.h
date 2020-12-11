@@ -21,8 +21,8 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char bordersel[]	    = "#008b8b";
+static const char col_dblue[]       = "#394065";
+static const char bordersel[]	      = "#008b8b";
 static const char col1[]            = "#ffffff";
 static const char col2[]            = "#ffffff";
 static const char col3[]            = "#ffffff";
@@ -50,7 +50,7 @@ static const char *colors[][3]      = {
 	[SchemeCol10] = { col10,     col_gray1, col_gray2 },
 	[SchemeCol11] = { col11,     col_gray1, col_gray2 },
 	[SchemeCol12] = { col12,     col_gray1, col_gray2 },
-	[SchemeSel]   = { col_gray4, col_cyan,  bordersel },
+	[SchemeSel]   = { col_gray4, col_dblue,  bordersel },
 };
 
 /* tagging */
@@ -95,7 +95,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", bordersel, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
@@ -123,6 +123,7 @@ static Key keys[] = {
 	/*{ MODKEY,	                XK_space,  setlayout,      {0} },*/
 	{ 0,				XK_Print,	spawn,		SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ ShiftMask,			XK_Print,	spawn,		SHCMD("maimpick") },
+	{ MODKEY,			XK_BackSpace,	spawn,		SHCMD("sysact") },
 	{ MODKEY|ControlMask,           XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
