@@ -12,9 +12,9 @@ static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Fira Code:size=9.5:style:Medium",
-                                        "FontAwesome 5 Free:style=Regular:size=10",
-                                        "FontAwesome 5 Free:style=Solid:size=10",
-                                        "FontAwesome 5 Brands:style=Regular:size=10",
+                                        "FontAwesome 5 Free:style=Regular:size=9.5",
+                                        "FontAwesome 5 Free:style=Solid:size=9.5",
+                                        "FontAwesome 5 Brands:style=Regular:size=9.5",
                                         "MaterialIcons:size=8",
 					};
 static const char dmenufont[]       = "Fira Code:size=10:style:Medium";
@@ -158,10 +158,14 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
 	/* Programs */
-	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
+	{ MODKEY,		    	XK_w,		spawn,		SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,		XK_t,		spawn,		SHCMD("telegram-desktop") },
-	{ MODKEY,			XK_n,		spawn,		SHCMD("nautilus") },
+	{ MODKEY,			XK_n,		spawn,		SHCMD("pcmanfm") },
+	{ MODKEY,			XK_s,		spawn,		SHCMD("spotify-tray") },
+	{ MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD("blueman-manager") },
+
 };
 
 /* button definitions */
