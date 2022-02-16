@@ -41,13 +41,15 @@ install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm startdwm ${DESTDIR}${PREFIX}/bin
 	cp -f dwm.desktop /usr/share/xsessions/
-	chmod 755 ${DESTDIR}${PREFIX}/bin/{dwm,startdwm}
+	chmod 755 ${DESTDIR}${PREFIX}/bin/startdwm
+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	mkdir -p /usr/share/xsessions/
 	cp -f ${INI} /usr/share/xsessions/
 	chmod 644 /usr/share/xsessions/${INI}
+	rm config.h
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\

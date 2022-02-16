@@ -5,24 +5,32 @@ static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int colorfultag    = 1;  /* 0 means use SchemeSel for selected tag */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Fira Code:size=9.5:style:Medium",
-                                        "FontAwesome 5 Free:style=Regular:size=9.5",
+static const int horizpadbar        = 2;        /* horizontal padding for statusbar */
+static const int vertpadbar         = 10;        /* vertical padding for statusbar */
+static const char *fonts[]          = { "FiraCode Nerd Font:size=9:style:Bold",
                                         "FontAwesome 5 Free:style=Solid:size=9.5",
-                                        "FontAwesome 5 Brands:style=Regular:size=9.5",
+                                        "FontAwesome 5 Brands:style=Bold:size=9.5",
                                         "MaterialIcons:size=8",
 					};
 static const char dmenufont[]       = "Fira Code:size=10:style:Medium";
-static const char col_gray1[]       = "#001233";
+static const char col_gray1[]       = "#282c34";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_dblue[]       = "#284b63";
 static const char col_red[]	        = "#e76f51";
+static const char col_bg[]         = "#282c34";
+static const char col_black[]       = "#2E3440";
+static const char col_dark[]       = "#1e222a";
+static const char col_red2[]         = "#BF616A";
+static const char col_orange[]         = "#e0c080";
+static const char col_green[]         = "#89b482";
 static const char col1[]            = "#1DB954";
 static const char col2[]            = "#7fbbb3";
 static const char col3[]            = "#83c092";
@@ -37,7 +45,7 @@ static const char col11[]           = "#ffffff";
 static const char col12[]           = "#ffffff";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
+	[SchemeNorm] = { col_gray3, col_bg, col_black },
 	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
 	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
 	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
@@ -50,11 +58,19 @@ static const char *colors[][3]      = {
 	[SchemeCol10] = { col10,     col_gray1, col_gray2 },
 	[SchemeCol11] = { col11,     col_gray1, col_gray2 },
 	[SchemeCol12] = { col12,     col_gray1, col_gray2 },
-	[SchemeSel]   = { col_gray4, col_dblue, col_dblue },
+	[SchemeSel]  = { col_gray4, col_dark,  col_black  },
+    [SchemeTag]  = { col_gray3, col_dark,    col_black },
+    [SchemeTag1] = { col9,  col_dark,  col_black },
+    [SchemeTag2] = { col_red,   col_dark,  col_black },
+    [SchemeTag3] = { col_orange, col_dark,  col_black },
+    [SchemeTag4] = { col_green, col_dark,  col_black },
+    [SchemeLayout] = { col_green, col_bg, col_black },
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "" };
+static const char *tags[] = { "", "ﭾ", "", "" };
+
+static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3, SchemeTag4 };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -109,6 +125,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_p,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+    { MODKEY|ShiftMask,     XK_n,            togglecolorfultag,   {0} },
 	{ MODKEY,	                XK_space,  zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_space,  focusmaster,    {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
@@ -159,10 +176,12 @@ static Key keys[] = {
 
 	/* Programs */
 	{ MODKEY,		    	XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,		XK_t,		spawn,		SHCMD("telegram-desktop") },
-	{ MODKEY,			XK_n,		spawn,		SHCMD("pcmanfm") },
+	{ MODKEY,		    	XK_a,		spawn,		SHCMD("ani-dmenu") },
+	{ MODKEY|ShiftMask,		XK_t,		spawn,		SHCMD("flatpak run org.telegram.desktop") },
+	{ MODKEY,			XK_n,		spawn,		SHCMD("nautilus") },
 	{ MODKEY,			XK_s,		spawn,		SHCMD("spotify-tray") },
 	{ MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD("blueman-manager") },
+	{ ControlMask,		  XK_m,		spawn,		SHCMD("dmenumtp") },
 
 };
 
@@ -170,8 +189,8 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
 	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
 	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
