@@ -13,12 +13,17 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int horizpadbar        = 2;        /* horizontal padding for statusbar */
 static const int vertpadbar         = 10;        /* vertical padding for statusbar */
-static const char *fonts[]          = { "FiraCode Nerd Font:size=9:style:Bold",
+static const char *fonts[]          = { "Fira Code Retina:size=8.5:style:Bold:antialias=true:autohint=true",
+                                        "Symbola:pixelsize=18:antialias=true:autohint=true",
+                                        "Akshar Unicode:pixelsize:14",
+                                        "FiraCode Nerd Font:size=9.5:style:Bold",
                                         "FontAwesome 5 Free:style=Solid:size=9.5",
                                         "FontAwesome 5 Brands:style=Bold:size=9.5",
                                         "MaterialIcons:size=8",
 					};
-static const char dmenufont[]       = "Fira Code:size=10:style:Medium";
+static const char dmenufont[]       = "Fira Code:size=11:style:Medium";
+static const char col_dmenubg[]       = "#282a36";
+static const char col_dmenusel[]       = "#6272a4";
 static const char col_gray1[]       = "#282c34";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -60,11 +65,11 @@ static const char *colors[][3]      = {
 	[SchemeCol12] = { col12,     col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_dark,  col_black  },
     [SchemeTag]  = { col_gray3, col_dark,    col_black },
-    [SchemeTag1] = { col9,  col_dark,  col_black },
-    [SchemeTag2] = { col_red,   col_dark,  col_black },
-    [SchemeTag3] = { col_orange, col_dark,  col_black },
-    [SchemeTag4] = { col_green, col_dark,  col_black },
-    [SchemeLayout] = { col_green, col_bg, col_black },
+    [SchemeTag1] = { col9,  col_black,  col_black },
+    [SchemeTag2] = { col_red,   col_black,  col_black },
+    [SchemeTag3] = { col_orange, col_black,  col_black },
+    [SchemeTag4] = { col_green, col_black,  col_black },
+    [SchemeLayout] = { col9, col_bg, col_black },
 };
 
 /* tagging */
@@ -72,6 +77,10 @@ static const char *tags[] = { "", "ﭾ", "", "" };
 
 static const int tagschemes[] = { SchemeTag1, SchemeTag2, SchemeTag3, SchemeTag4 };
 
+static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
+static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
+static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
@@ -79,6 +88,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "xdman-Main",     NULL,  NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
@@ -111,7 +121,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_dblue, "-nf", col_gray3, "-sb", col_red, "-sf", col_gray1, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_dmenubg, "-nf", col_gray4, "-sb", col_dmenusel, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
@@ -176,12 +186,16 @@ static Key keys[] = {
 
 	/* Programs */
 	{ MODKEY,		    	XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY,		    	XK_a,		spawn,		SHCMD("ani-dmenu") },
-	{ MODKEY|ShiftMask,		XK_t,		spawn,		SHCMD("flatpak run org.telegram.desktop") },
-	{ MODKEY,			XK_n,		spawn,		SHCMD("nautilus") },
-	{ MODKEY,			XK_s,		spawn,		SHCMD("spotify-tray") },
+	{ MODKEY,		    	XK_y,		spawn,		SHCMD("ytfzf -D") },
+	{ MODKEY|ShiftMask,		XK_t,		spawn,		SHCMD("Telegram") },
+	{ MODKEY,			XK_n,		spawn,		SHCMD("nemo") },
+	{ MODKEY,			XK_s,		spawn,		SHCMD("spotify-start") },
+	{ MODKEY,			XK_x,		spawn,		SHCMD("spotify-stop") },
 	{ MODKEY|ShiftMask,		XK_b,		spawn,		SHCMD("blueman-manager") },
 	{ ControlMask,		  XK_m,		spawn,		SHCMD("dmenumtp") },
+	{ MODKEY,			XK_x,		spawn,		SHCMD("spotify-stop") },
+	{ MODKEY,			XK_r,		spawn,		SHCMD("kitty -e ranger") },
+	{ MODKEY,			XK_x,		spawn,		SHCMD("xdman") },
 
 };
 
