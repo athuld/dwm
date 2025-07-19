@@ -89,6 +89,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "xdman-Main",     NULL,  NULL,       0,            1,           -1 },
+	{ "tk",     NULL,  NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
@@ -122,7 +123,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_dmenubg, "-nf", col_gray4, "-sb", col_dmenusel, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "st", "fish" };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -132,7 +133,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_p,      incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,                       XK_p,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
     { MODKEY|ShiftMask,     XK_n,            togglecolorfultag,   {0} },
@@ -159,8 +160,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_g,      setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_g,      setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	{ MODKEY,			XK_minus,	spawn,		SHCMD("pamixer --allow-boost -d 5") },
 	{ MODKEY|ShiftMask,		XK_minus,	spawn,		SHCMD("pamixer --allow-boost -d 15") },
@@ -196,6 +197,8 @@ static Key keys[] = {
 	{ MODKEY,			XK_x,		spawn,		SHCMD("spotify-stop") },
 	{ MODKEY,			XK_r,		spawn,		SHCMD("kitty -e ranger") },
 	{ MODKEY,			XK_x,		spawn,		SHCMD("xdman") },
+	{ MODKEY,			XK_p,		spawn,		SHCMD("clipmenu") },
+	{ MODKEY|ShiftMask,		XK_w,		spawn,		SHCMD("nitrogen --set-auto --random") },
 
 };
 
